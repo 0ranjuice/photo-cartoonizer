@@ -9,8 +9,5 @@ emoji
 pyshorteners
 scipy
 
-waitress
-
 opencv-python
 numpy
-matplotlib
