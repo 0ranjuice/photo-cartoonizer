@@ -70,7 +70,7 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
 
-
+    
 def color_quantization(img, k):
     # Transform the image
     data = np.float32(img).reshape((-1, 3))
@@ -114,3 +114,4 @@ plt.figure(figsize=(18, 10), facecolor='black')
 plt.axis('off')
 plt.imshow(image)
 plt.show()
+
