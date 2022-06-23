@@ -12,18 +12,22 @@ Line Bot機器人串接與測試
 
 # 載入LineBot所需要的套件
 import os
+import re
+from argparse import ArgumentParser
+import json
+
 from flask import Flask, request, abort
+from jsonref import requests
+
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
-import cv2
-from matplotlib import pyplot as plt
-import numpy as np
 
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi('haz544FhuBP/m3xKqQ2B/RATT17n8Vwp380L9BfFj9UN+SpHMLUloC61EG8VE0e/qvU0BaYxdlHtvZoBjVYdrSDsK2ysH+YtyA/ohx8l2QGc3K6TmP8sGYsr6IvlG/B4ARQMbxRSntZMD6QJNBDdlwdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi(
+    'haz544FhuBP/m3xKqQ2B/RATT17n8Vwp380L9BfFj9UN+SpHMLUloC61EG8VE0e/qvU0BaYxdlHtvZoBjVYdrSDsK2ysH+YtyA/ohx8l2QGc3K6TmP8sGYsr6IvlG/B4ARQMbxRSntZMD6QJNBDdlwdB04t89/1O/w1cDnyilFU=')
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('5c5342dccfd566f8cb7420c77e73d6c5')
 
@@ -54,7 +58,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage("就你一個人要分個屁！"))
 
 
 # 主程式
