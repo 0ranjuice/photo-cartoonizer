@@ -16,7 +16,7 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
 import pyimgur
-import cv2
+# import cv2
 import numpy as np
 
 app = Flask(__name__)
