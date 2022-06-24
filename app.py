@@ -65,7 +65,7 @@ def handle_message(event):
         with open('Images', 'wb') as fd:
             for chunk in message_content.iter_content():
                 fd.write(chunk)
-        img_file = 'Images/' + event.message.id + '.png'
+        img_file = 'Images'
         img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
         line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
 
