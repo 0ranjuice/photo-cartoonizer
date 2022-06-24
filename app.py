@@ -62,14 +62,15 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
     elif event.message.type == 'image':
         SendImage = line_bot_api.get_message_content(event.message.id)
+        heroku_url = 'https://photo-cartoonizer.herokuapp.com'
 
-        img_path = './Images/' + event.message.id + '.png'
+        img_path = './static/' + event.message.id + '.png'
         with open(img_path, 'wb') as fd:
             for i in SendImage.iter_content():
                 fd.write(i)
 
-        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_path)
-        line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
+        rtn_image = heroku_url + "/static/" + event.message.id + ".png"
+        line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=rtn_image, preview_image_url=rtn_image))
 
 
 # 主程式
