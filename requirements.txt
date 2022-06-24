@@ -9,6 +9,6 @@ emoji
 pyshorteners
 scipy
 
-opencv-python
+opencv-contrib-python-headless
 numpy
 pyimgur

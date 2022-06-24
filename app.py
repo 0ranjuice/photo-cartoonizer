@@ -16,7 +16,7 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
 import pyimgur
-# import cv2
+import cv2
 import numpy as np
 
 app = Flask(__name__)
@@ -56,6 +56,7 @@ def glucose_graph(client_id, img_path):
     upload_image = img.upload_image(img_path, title="Uploaded with PyImgur")
     return upload_image.link
 
+
 '''
 def color_quantization(img, k):
     # Transform the image
@@ -78,6 +79,7 @@ def edge_mask(img, line_size, blur_value):
     edges = cv2.adaptiveThreshold(gray_blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, line_size, blur_value)
     return edges
 '''
+
 
 @handler.add(MessageEvent)
 def handle_message(event):
@@ -112,11 +114,13 @@ def handle_message(event):
         cv2.imwrite(img_file, image)
         '''
         img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
-        line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
+        line_bot_api.reply_message(event.reply_token,
+                                   ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
 
 
 # 主程式
 import os
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
