@@ -64,7 +64,7 @@ def handle_message(event):
         SendImage = line_bot_api.get_message_content(event.message.id)
         heroku_url = 'https://photo-cartoonizer.herokuapp.com'
 
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(event.message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(event))
 
 
 # 主程式
