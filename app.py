@@ -16,6 +16,8 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
 import pyimgur
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 
@@ -55,28 +57,6 @@ def glucose_graph(client_id, img_path):
     return upload_image.link
 
 
-@handler.add(MessageEvent)
-def handle_message(event):
-    if event.message.type == 'text':
-        message = event.message.text
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-    elif event.message.type == 'image':
-        message_content = line_bot_api.get_message_content(event.message.id)
-        with open('Images', 'wb') as fd:
-            for chunk in message_content.iter_content():
-                fd.write(chunk)
-        img_file = 'Images'
-        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
-        line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
-
-# 主程式
-import os
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-
-
-'''
 def color_quantization(img, k):
     # Transform the image
     data = np.float32(img).reshape((-1, 3))
@@ -99,25 +79,49 @@ def edge_mask(img, line_size, blur_value):
     return edges
 
 
-image = cv2.imread("linda_1.jpg", -1)  # Read image
+@handler.add(MessageEvent)
+def handle_message(event):
+    if event.message.type == 'text':
+        message = event.message.text
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+    elif event.message.type == 'image':
+        message_content = line_bot_api.get_message_content(event.message.id)
+        img_file = 'Images'
+        with open(img_file, 'wb') as fd:
+            for chunk in message_content.iter_content():
+                fd.write(chunk)
 
-# Parameter setting
-line_size = 7
-blur_value = 5
-total_color = 9
+        image = cv2.imread(img_file, -1)  # Read image
 
-edges = edge_mask(image, line_size, blur_value)
+        # Parameter setting
+        line_size = 7
+        blur_value = 5
+        total_color = 9
 
-quant_img = color_quantization(image, total_color)
+        edges = edge_mask(image, line_size, blur_value)
 
-blurred = cv2.bilateralFilter(quant_img, d=3, sigmaColor=100, sigmaSpace=100)
+        quant_img = color_quantization(image, total_color)
 
-cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
+        blurred = cv2.bilateralFilter(quant_img, d=3, sigmaColor=100, sigmaSpace=100)
 
-# Show image
-image = cv2.cvtColor(cartoon, cv2.COLOR_BGR2RGB)
-plt.figure(figsize=(18, 10), facecolor='black')
-plt.axis('off')
-plt.imshow(image)
-plt.show()
+        cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
+
+        image = cv2.cvtColor(cartoon, cv2.COLOR_BGR2RGB)
+
+        cv2.imwrite(img_file, image)
+        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
+        line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
+
+# 主程式
+import os
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
+
+'''
+
+
+
+
 '''
