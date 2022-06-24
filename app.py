@@ -109,8 +109,10 @@ def handle_message(event):
         image = cv2.cvtColor(cartoon, cv2.COLOR_BGR2RGB)
 
         cv2.imwrite(img_file, image)
+
         img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
         line_bot_api.reply_message(event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
+
 
 # 主程式
 import os
