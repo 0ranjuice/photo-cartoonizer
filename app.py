@@ -51,7 +51,7 @@ def color_quantization(img, k):
     data = np.float32(img).reshape((-1, 3))
 
     # Determine criteria
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 15, 0.001)
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 0.001)
 
     # Implementing K-Means
     ret, label, center = cv2.kmeans(data, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
@@ -84,14 +84,14 @@ def handle_message(event):
 
         # Parameter setting
         line_size = 7
-        blur_value = 5
-        total_color = 9
+        blur_value = 7
+        total_color = 10
 
         edges = edge_mask(image, line_size, blur_value)
 
         quant_img = color_quantization(image, total_color)
 
-        blurred = cv2.bilateralFilter(quant_img, d=3, sigmaColor=100, sigmaSpace=100)
+        blurred = cv2.bilateralFilter(quant_img, d=7, sigmaColor=200, sigmaSpace=200)
 
         cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
 
