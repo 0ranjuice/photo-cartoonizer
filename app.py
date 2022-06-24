@@ -1,15 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  2 21:16:35 2021
-
-@author: Ivan
-版權屬於「行銷搬進大程式」所有，若有疑問，可聯絡ivanyang0606@gmail.com
-
-Line Bot聊天機器人
-第一章 Line Bot申請與串接
-Line Bot機器人串接與測試
-"""
-
 # 載入LineBot所需要的套件
 from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
@@ -57,7 +46,6 @@ def glucose_graph(client_id, img_path):
     return upload_image.link
 
 
-'''
 def color_quantization(img, k):
     # Transform the image
     data = np.float32(img).reshape((-1, 3))
@@ -78,7 +66,6 @@ def edge_mask(img, line_size, blur_value):
     gray_blur = cv2.medianBlur(gray, blur_value)
     edges = cv2.adaptiveThreshold(gray_blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, line_size, blur_value)
     return edges
-'''
 
 
 @handler.add(MessageEvent)
@@ -93,7 +80,6 @@ def handle_message(event):
             for chunk in message_content.iter_content():
                 fd.write(chunk)
 
-        '''
         image = cv2.imread(img_file, -1)  # Read image
 
         # Parameter setting
@@ -112,7 +98,7 @@ def handle_message(event):
         image = cv2.cvtColor(cartoon, cv2.COLOR_BGR2RGB)
 
         cv2.imwrite(img_file, image)
-        '''
+
         img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_file)
         line_bot_api.reply_message(event.reply_token,
                                    ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
