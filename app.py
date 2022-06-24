@@ -95,9 +95,9 @@ def handle_message(event):
 
         cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
 
-        cv2.imwrite('rtn.jpeg', cartoon)
+        cv2.imwrite('rtn.png', cartoon)
 
-        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path='rtn.jpeg')
+        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path='rtn.png')
         line_bot_api.reply_message(event.reply_token,
                                    ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
 
