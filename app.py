@@ -83,13 +83,13 @@ def handle_message(event):
         # Parameter setting
         line_size = 7
         blur_value = 7
-        total_color = 20
+        total_color = 10
 
         edges = edge_mask(image, line_size, blur_value)  # Get the Outline of the image
 
         quant_img = color_quantization(image, total_color)  # Reduce the number of colors in the image
 
-        blurred = cv2.bilateralFilter(quant_img, d=7, sigmaColor=200, sigmaSpace=200)  # Blur the image without ruining the edges
+        blurred = cv2.bilateralFilter(quant_img, d=7, sigmaColor=150, sigmaSpace=150)  # Blur the image without ruining the edges
 
         cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)  # Merge the outline and the color-reduced image
 
