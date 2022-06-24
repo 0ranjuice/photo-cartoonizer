@@ -55,7 +55,10 @@ def handle_message(event):
         message = event.message.text
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
     elif event.message.type == 'image':
-        SendImage = line_bot_api.get_message_content(event.message.id)
+        message_content = line_bot_api.get_message_content(event.message.id)
+        with open('Images', 'wb') as fd:
+            for chunk in message_content.iter_content():
+                fd.write(chunk)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(event.message.id))
 
 
