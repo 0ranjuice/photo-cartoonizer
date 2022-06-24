@@ -97,7 +97,7 @@ def handle_message(event):
 
         image = cv2.cvtColor(cartoon, cv2.COLOR_BGR2RGB)
 
-        rtn_img_file = 'Images/rtn_img.png'
+        rtn_img_file = 'rtnImages'
 
         cv2.imwrite(rtn_img_file, image)
 
