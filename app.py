@@ -85,7 +85,7 @@ def handle_message(event):
         # Parameter setting
         line_size = 7
         blur_value = 7
-        total_color = 10
+        total_color = 20
 
         edges = edge_mask(image, line_size, blur_value)
 
