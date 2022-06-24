@@ -99,7 +99,7 @@ def handle_message(event):
 
         rtn_img_file = 'rtnImages'
 
-        cv2.imwrite(rtn_img_file, image)
+        cv2.imwrite(rtn_img_file + '/rtn_img.png', image)
 
         img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=rtn_img_file)
         line_bot_api.reply_message(event.reply_token,
