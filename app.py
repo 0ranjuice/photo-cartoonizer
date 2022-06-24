@@ -15,6 +15,7 @@ from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
+import pyimgur
 
 app = Flask(__name__)
 
@@ -48,11 +49,28 @@ def callback():
 
 # 訊息傳遞區塊
 # 基本上程式編輯都在這個function #
+def glucose_graph(client_id, img_path):
+    img = pyimgur.Imgur(client_id)
+    upload_image = img.upload_image(img_path, title="Uploaded with PyImgur")
+    return upload_image.link
+
+
 @handler.add(MessageEvent)
 def handle_message(event):
     if event.message.type == 'text':
         message = event.message.text
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+    elif event.message.type == 'image':
+        SendImage = line_bot_api.get_message_content(event.message.id)
+
+        img_path = './Image/' + event.message.id + '.png'
+        with open(img_path, 'wb') as fd:
+            for i in SendImage.iter_content():
+                fd.write(i)
+
+        img_url = glucose_graph(client_id='4bf5bca0439f960', img_path=img_path)
+        line_bot_api.reply_message(event.reply_token,
+                                   ImageSendMessage(original_content_url=img_url, preview_image_url=img_url))
 
 
 # 主程式
